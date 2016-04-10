@@ -159,7 +159,7 @@ void Scanner::ScanNextToken() {
     return ScanPlainScalar();
 
   // don't know what it is!
-  throw ParserException(INPUT.mark(), ErrorMsg::UNKNOWN_TOKEN);
+  ParserException(INPUT.mark(), ErrorMsg::UNKNOWN_TOKEN);
 }
 
 // ScanToNextToken
@@ -268,7 +268,9 @@ Token::TYPE Scanner::GetStartTokenFor(IndentMarker::INDENT_TYPE type) const {
       break;
   }
   assert(false);
-  throw std::runtime_error("yaml-cpp: internal error, invalid indent type");
+
+  std::cerr << "yaml-cpp: internal error, invalid indent type";
+  std::exit(1);
 }
 
 // PushIndentTo
@@ -381,6 +383,6 @@ void Scanner::ThrowParserException(const std::string& msg) const {
     const Token& token = m_tokens.front();
     mark = token.mark;
   }
-  throw ParserException(mark, msg);
+  ParserException(mark, msg);
 }
 }

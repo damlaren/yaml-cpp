@@ -4,6 +4,12 @@
 ## Due to Mac OSX we need to keep compatibility with CMake 2.6
 # see http://www.cmake.org/Wiki/CMake_Policies
 cmake_minimum_required(VERSION 2.6)
+
+# Undo ogle's settings for warnings, but keep exceptions and RTTI disabled.
+if(CMAKE_COMPILER_IS_GNUCC)
+  set(CMAKE_CXX_FLAGS "-fno-exceptions -fno-rtti")
+endif (CMAKE_COMPILER_IS_GNUCC)
+
 # see http://www.cmake.org/cmake/help/cmake-2-8-docs.html#policy:CMP0012
 if(POLICY CMP0012)
 	cmake_policy(SET CMP0012 OLD)

@@ -23,7 +23,11 @@ TEST(LoadNodeTest, NumericConversion) {
   Node node = Load("[1.5, 1, .nan, .inf, -.inf, 0x15, 015]");
   EXPECT_EQ(1.5f, node[0].as<float>());
   EXPECT_EQ(1.5, node[0].as<double>());
-  EXPECT_THROW(node[0].as<int>(), TypedBadConversion<int>);
+
+  // ogle disables exceptions.
+  // EXPECT_THROW(node[0].as<int>(), TypedBadConversion<int>);
+  ASSERT_TRUE(false);
+
   EXPECT_EQ(1, node[1].as<int>());
   EXPECT_EQ(1.0f, node[1].as<float>());
   EXPECT_NE(node[2].as<float>(), node[2].as<float>());
@@ -178,11 +182,17 @@ TEST(LoadNodeTest, EmptyString) {
 
 TEST(LoadNodeTest, DereferenceIteratorError) {
   Node node = Load("[{a: b}, 1, 2]");
-  EXPECT_THROW(node.begin()->first.as<int>(), InvalidNode);
+
+  // ogle disables exceptions.
+  // EXPECT_THROW(node.begin()->first.as<int>(), InvalidNode);
+  ASSERT_TRUE(false);
+
   EXPECT_EQ(true, (*node.begin()).IsMap());
   EXPECT_EQ(true, node.begin()->IsMap());
-  EXPECT_THROW((*node.begin()->begin()).Type(), InvalidNode);
-  EXPECT_THROW(node.begin()->begin()->Type(), InvalidNode);
+
+  // EXPECT_THROW((*node.begin()->begin()).Type(), InvalidNode);
+  // EXPECT_THROW(node.begin()->begin()->Type(), InvalidNode);
+  ASSERT_TRUE(false);
 }
 
 TEST(NodeTest, EmitEmptyNode) {
@@ -216,13 +226,10 @@ TEST(NodeTest, IncompleteJson) {
        ErrorMsg::END_OF_MAP_FLOW},
   };
   for (const ParserExceptionTestCase test : tests) {
-    try {
-      Load(test.input);
-      FAIL() << "Expected exception " << test.expected_exception << " for "
-             << test.name << ", input: " << test.input;
-    } catch (const ParserException& e) {
-      EXPECT_EQ(test.expected_exception, e.msg);
-    }
+    // ogle disables exceptions.
+    Load(test.input);
+    FAIL() << "Expected exception " << test.expected_exception << " for "
+           << test.name << ", input: " << test.input;
   }
 }
 

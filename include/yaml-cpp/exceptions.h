@@ -9,6 +9,7 @@
 
 #include "yaml-cpp/mark.h"
 #include "yaml-cpp/traits.h"
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <sstream>
@@ -108,14 +109,15 @@ inline const std::string KEY_NOT_FOUND_WITH_KEY(
 }
 }
 
-class Exception : public std::runtime_error {
+// This is not
+class Exception {
  public:
-  Exception(const Mark& mark_, const std::string& msg_)
-      : std::runtime_error(build_what(mark_, msg_)), mark(mark_), msg(msg_) {}
-  virtual ~Exception() throw() {}
+  Exception(const Mark& mark_, const std::string& msg_) {
+    std::cerr << build_what(mark_, msg_) << std::endl;
+    std::exit(1);
+  }
 
-  Mark mark;
-  std::string msg;
+  virtual ~Exception() = default;
 
  private:
   static const std::string build_what(const Mark& mark,
@@ -163,7 +165,7 @@ class TypedKeyNotFound : public KeyNotFound {
  public:
   TypedKeyNotFound(const Mark& mark_, const T& key_)
       : KeyNotFound(mark_, key_), key(key_) {}
-  virtual ~TypedKeyNotFound() throw() {}
+  virtual ~TypedKeyNotFound() {}
 
   T key;
 };

@@ -7,13 +7,9 @@
 
 using ::testing::_;
 
+// Exceptions are disabled in ogle.
 #define EXPECT_THROW_PARSER_EXCEPTION(statement, message) \
-  ASSERT_THROW(statement, ParserException);               \
-  try {                                                   \
-    statement;                                            \
-  } catch (const ParserException& e) {                    \
-    EXPECT_EQ(e.msg, message);                            \
-  }
+  ASSERT_TRUE(false);
 
 namespace YAML {
 namespace {

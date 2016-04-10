@@ -78,21 +78,21 @@ void Parser::HandleDirective(const Token& token) {
 // . Should be of the form 'major.minor' (like a version number)
 void Parser::HandleYamlDirective(const Token& token) {
   if (token.params.size() != 1)
-    throw ParserException(token.mark, ErrorMsg::YAML_DIRECTIVE_ARGS);
+    ParserException(token.mark, ErrorMsg::YAML_DIRECTIVE_ARGS);
 
   if (!m_pDirectives->version.isDefault)
-    throw ParserException(token.mark, ErrorMsg::REPEATED_YAML_DIRECTIVE);
+    ParserException(token.mark, ErrorMsg::REPEATED_YAML_DIRECTIVE);
 
   std::stringstream str(token.params[0]);
   str >> m_pDirectives->version.major;
   str.get();
   str >> m_pDirectives->version.minor;
   if (!str || str.peek() != EOF)
-    throw ParserException(
+    ParserException(
         token.mark, std::string(ErrorMsg::YAML_VERSION) + token.params[0]);
 
   if (m_pDirectives->version.major > 1)
-    throw ParserException(token.mark, ErrorMsg::YAML_MAJOR_VERSION);
+    ParserException(token.mark, ErrorMsg::YAML_MAJOR_VERSION);
 
   m_pDirectives->version.isDefault = false;
   // TODO: warning on major == 1, minor > 2?
@@ -103,12 +103,12 @@ void Parser::HandleYamlDirective(const Token& token) {
 // 'prefix' in the file.
 void Parser::HandleTagDirective(const Token& token) {
   if (token.params.size() != 2)
-    throw ParserException(token.mark, ErrorMsg::TAG_DIRECTIVE_ARGS);
+    ParserException(token.mark, ErrorMsg::TAG_DIRECTIVE_ARGS);
 
   const std::string& handle = token.params[0];
   const std::string& prefix = token.params[1];
   if (m_pDirectives->tags.find(handle) != m_pDirectives->tags.end())
-    throw ParserException(token.mark, ErrorMsg::REPEATED_TAG_DIRECTIVE);
+    ParserException(token.mark, ErrorMsg::REPEATED_TAG_DIRECTIVE);
 
   m_pDirectives->tags[handle] = prefix;
 }
